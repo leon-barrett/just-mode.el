@@ -37,7 +37,7 @@
 ;; A major mode for editing justfiles, as defined by the tool "just":
 ;; https://github.com/casey/just
 ;;
-;; This depends on emacs 26.1 for `prog-first-column'.
+;; This depends on Emacs 26.1 for `prog-first-column'.
 ;;
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -84,7 +84,8 @@
     syntax-table))
 
 (defun just-untab-region (N)
-  "Untab a selected region using indent-rigidly."
+  "Untab a selected region using `indent-rigidly'.
+Argument N number of untabs to perform"
   (interactive "p")
   (let ((begin (if (use-region-p)
                  (region-beginning)
@@ -92,11 +93,11 @@
         (end (if (use-region-p)
                  (region-end)
                  (line-end-position))))
-    (indent-rigidly begin end -4)))
+    (indent-rigidly begin end (* N -4))))
 
 ;; from https://www.emacswiki.org/emacs/BackspaceWhitespaceToTabStop
 ;; (which is licensed GPL 2 or later)
-(defvar just-indent-offset 4 "My indentation offset. ")
+(defvar just-indent-offset 4 "My indentation offset.")
 (defun just-backspace-whitespace-to-tab-stop ()
   "Delete whitespace backwards to the next tab-stop, otherwise delete one character."
   (interactive)
@@ -117,7 +118,7 @@
           (call-interactively 'backward-delete-char))))))
 
 (defun just-indent-line ()
-  "Indent bodies of rules by the previous indent, or by tab-width."
+  "Indent bodies of rules by the previous indent, or by `tab-width'."
   (interactive)
   (and abbrev-mode (= (char-syntax (preceding-char)) ?w)
        (expand-abbrev))
