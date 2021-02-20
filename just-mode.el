@@ -63,7 +63,7 @@
     ("^\\(@?\\)\\([^ @:\n]+\\).*:\\([^=\n]\\|$\\)"
      (1 font-lock-negation-char-face)
      (2 font-lock-function-name-face))
-    ;; I would have highlighted arguments to rules, but it was hard so I gave up.
+    ;; TODO highlight arguments to rules. I would have done it, but it was hard so I gave up for now.
     ))
 
 (defconst just-font-lock-keywords
