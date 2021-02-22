@@ -169,7 +169,9 @@ Argument N number of untabs to perform"
 
 (provide 'just-mode)
 
+;;;###autoload
 (add-to-list 'auto-mode-alist '("/justfile\\'" . just-mode))
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.just\\(file\\)?\\'" . just-mode))
 
 ;;; just-mode.el ends here
