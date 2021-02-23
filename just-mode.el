@@ -158,7 +158,9 @@ Argument N number of untabs to perform"
   ;; Tabs
   (setq-local tab-width 4)
   (setq-local tab-stop-list (number-sequence 0 120 4))
-  (setq-default evil-shift-width 4)
+
+  (when (boundp 'evil-shift-width)
+    (setq-local evil-shift-width 4))
 
   ;; Indentation
   (setq-local indent-line-function 'just-indent-line)
