@@ -106,7 +106,7 @@ Argument N number of untabs to perform"
           (save-excursion
             (> (point) (progn (back-to-indentation)
                               (point)))))
-      (call-interactively 'backward-delete-char-untabify)
+      (call-interactively #'backward-delete-char-untabify)
     (let ((movement (% (current-column) just-indent-offset))
           (p (point)))
       (when (= movement 0) (setq movement just-indent-offset))
@@ -115,7 +115,7 @@ Argument N number of untabs to perform"
       (save-match-data
         (if (string-match "[^\t ]*\\([\t ]+\\)$" (buffer-substring-no-properties (- p movement) p))
             (backward-delete-char (- (match-end 1) (match-beginning 1)))
-          (call-interactively 'backward-delete-char))))))
+          (call-interactively #'backward-delete-char))))))
 
 (defun just-indent-line ()
   "Indent bodies of rules by the previous indent, or by `tab-width'."
@@ -163,8 +163,8 @@ Argument N number of untabs to perform"
 
   ;; Indentation
   (setq-local indent-line-function 'just-indent-line)
-  (local-set-key (kbd "DEL") 'just-backspace-whitespace-to-tab-stop)
-  (local-set-key (kbd "<backtab>") 'just-untab-region))
+  (local-set-key (kbd "DEL") #'just-backspace-whitespace-to-tab-stop)
+  (local-set-key (kbd "<backtab>") #'just-untab-region))
 
 
 
