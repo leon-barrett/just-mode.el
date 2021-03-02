@@ -126,7 +126,6 @@ Argument N number of untabs to perform"
       ;; Don't indent when hitting tab in the middle of a line.
       'noindent
     (skip-chars-forward " \t")
-    (message "prog-first-column %s" (prog-first-column))
     (indent-to
      (if (= (line-number-at-pos) (prog-first-column))
          (prog-first-column)
