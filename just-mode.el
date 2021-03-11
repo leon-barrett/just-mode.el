@@ -123,7 +123,7 @@ Argument N number of untabs to perform"
          (forward-line -1)
          (skip-chars-forward " \t")
          (let* ((previous-indentation (current-column))
-                (previous-line-is-empty (= 0 (- (line-end-position) (line-beginning-position))))
+                (previous-line-is-empty (and (bolp) (eolp)))
                 (previous-line-contents (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
                 (previous-line-is-rule (string-match "^[^ \t#:][^#:]*:\\([^=].*\\|$\\)" previous-line-contents)))
            (cond (previous-line-is-empty (prog-first-column))
