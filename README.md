@@ -5,7 +5,7 @@ by [just](https://github.com/casey/just).
 
 # Installation
 
-`just-mode.el` can be installed through [MELPA](https://melpa.org/).
+`just-mode` can be installed through [MELPA](https://melpa.org/#/just-mode).
 
 # Usage
 
