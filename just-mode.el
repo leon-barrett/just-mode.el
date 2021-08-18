@@ -161,8 +161,8 @@ Argument N number of untabs to perform"
 (provide 'just-mode)
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("/justfile\\'" . just-mode))
+(add-to-list 'auto-mode-alist '("/[Jj]ustfile\\'" . just-mode))
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.just\\(file\\)?\\'" . just-mode))
+(add-to-list 'auto-mode-alist '("\\.[Jj]ust\\(file\\)?\\'" . just-mode))
 
 ;;; just-mode.el ends here
