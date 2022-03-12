@@ -39,6 +39,13 @@
 
 ;; TODO Use nested modes for rule bodies so e.g. we can have Python mode for a Python script.
 
+(defgroup just nil
+  "Major mode for editing just files"
+  :group 'languages
+  :prefix "just-"
+  :link '(url-link :tag "Site" "https://github.com/leon-barrett/just-mode.el")
+  :link '(url-link :tag "Repository" "https://github.com/leon-barrett/just-mode.el"))
+
 (defconst just-keywords
   '("\\<\\(set\\|alias\\|arch\\|os\\|os_family\\|env_var_or_default\\|env_var\\|invocation_directory\\|justfile\\|justfile_directory\\|justfile_directory\\|if\\|else\\|export\\)\\>"))
 
@@ -88,7 +95,7 @@ Argument N number of untabs to perform"
 (defcustom just-executable "just"
   "Location of just executable."
   :type 'file
-  :group 'rego
+  :group 'just
   :safe 'stringp)
 
 (defun just-format-buffer ()
