@@ -85,6 +85,21 @@ Argument N number of untabs to perform"
                  (line-end-position))))
     (indent-rigidly begin end (* N -4))))
 
+(defcustom just-executable "just"
+  "Location of just executable."
+  :type 'file
+  :group 'rego
+  :safe 'stringp)
+
+(defun just-format-buffer ()
+  "Formats your buffer containing justfile."
+  (interactive)
+  (let ((exit-code (call-process just-executable nil nil nil "--unstable" "--fmt")))
+    (if (eq exit-code 0)
+        (revert-buffer :ignore-auto :noconfirm)
+        (message "Formatted")
+      (message "Format failed with exit code %s" exit-code))))
+
 ;; from https://www.emacswiki.org/emacs/BackspaceWhitespaceToTabStop
 ;; (which is licensed GPL 2 or later)
 (defvar just-indent-offset 4 "My indentation offset.")
