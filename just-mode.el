@@ -39,6 +39,13 @@
 
 ;; TODO Use nested modes for rule bodies so e.g. we can have Python mode for a Python script.
 
+(defgroup just nil
+  "Major mode for editing just files"
+  :group 'languages
+  :prefix "just-"
+  :link '(url-link :tag "Site" "https://github.com/leon-barrett/just-mode.el")
+  :link '(url-link :tag "Repository" "https://github.com/leon-barrett/just-mode.el"))
+
 (defconst just-keywords
   '("\\<\\(set\\|alias\\|arch\\|os\\|os_family\\|env_var_or_default\\|env_var\\|invocation_directory\\|justfile\\|justfile_directory\\|justfile_directory\\|if\\|else\\|export\\)\\>"))
 
@@ -84,6 +91,21 @@ Argument N number of untabs to perform"
                  (region-end)
                  (line-end-position))))
     (indent-rigidly begin end (* N -4))))
+
+(defcustom just-executable "just"
+  "Location of just executable."
+  :type 'file
+  :group 'just
+  :safe 'stringp)
+
+(defun just-format-buffer ()
+  "Formats your buffer containing justfile."
+  (interactive)
+  (let ((exit-code (call-process just-executable nil nil nil "--unstable" "--fmt")))
+    (if (eq exit-code 0)
+        (revert-buffer :ignore-auto :noconfirm)
+        (message "Formatted")
+      (message "Format failed with exit code %s" exit-code))))
 
 ;; from https://www.emacswiki.org/emacs/BackspaceWhitespaceToTabStop
 ;; (which is licensed GPL 2 or later)
