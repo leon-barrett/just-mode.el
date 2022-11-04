@@ -175,9 +175,7 @@ Argument N number of untabs to perform"
 
   ;; Imenu
   (setq-local imenu-generic-expression
-              '((nil
-                 "^\\([A-Z_a-z][0-9A-Z_a-z-]+\\)"
-                 1)))
+              '((nil "^\\([A-Z_a-z][0-9A-Z_a-z-]+\\)" 1)))
 
   ;; Indentation
   (setq-local indent-line-function 'just-indent-line)
