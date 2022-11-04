@@ -175,7 +175,8 @@ Argument N number of untabs to perform"
 
   ;; Imenu
   (setq-local imenu-generic-expression
-              '((nil "^\\([A-Z_a-z][0-9A-Z_a-z-]+\\)" 1)))
+              '(("variable" "^\\(?:\\(?:export\\|set\\) +\\)?\\([A-Z_a-z][0-9A-Z_a-z-]+\\) +:=" 1)
+                ("task" "^\\(?:alias +\\)?\\([A-Z_a-z][0-9A-Z_a-z-]+\\)[^0-9A-Z_a-z-]" 1)))
 
   ;; Indentation
   (setq-local indent-line-function 'just-indent-line)
