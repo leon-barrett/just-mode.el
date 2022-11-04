@@ -173,6 +173,12 @@ Argument N number of untabs to perform"
   (when (boundp 'evil-shift-width)
     (setq-local evil-shift-width 4))
 
+  ;; Imenu
+  (setq-local imenu-generic-expression
+              '((nil
+                 "^\\([A-Z_a-z][0-9A-Z_a-z-]+\\)"
+                 1)))
+
   ;; Indentation
   (setq-local indent-line-function 'just-indent-line)
   (local-set-key (kbd "DEL") #'just-backspace-whitespace-to-tab-stop)
