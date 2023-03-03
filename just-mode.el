@@ -36,6 +36,7 @@
 ;; NOTE: This depends on Emacs 26.1 for `prog-first-column'.
 
 (require 'prog-mode)
+(require 'subr-x)
 
 ;; TODO Use nested modes for rule bodies so e.g. we can have Python mode for a Python script.
 
@@ -46,26 +47,82 @@
   :link '(url-link :tag "Site" "https://github.com/leon-barrett/just-mode.el")
   :link '(url-link :tag "Repository" "https://github.com/leon-barrett/just-mode.el"))
 
-(defconst just-keywords
-  '("\\<\\(set\\|alias\\|arch\\|os\\|os_family\\|env_var_or_default\\|env_var\\|invocation_directory\\|justfile\\|justfile_directory\\|justfile_directory\\|if\\|else\\|export\\)\\>"))
+(defconst just-builtin-functions
+  '(
+    ;; Built-in functions from https://github.com/casey/just/blob/9f03441eef28fd662b33a8f1961e2ee97b60f7ff/src/function.rs#L22
+    "absolute_path"
+    "arch"
+    "capitalize"
+    "clean"
+    "env_var"
+    "env_var_or_default"
+    "error"
+    "extension"
+    "file_name"
+    "file_stem"
+    "invocation_directory"
+    "invocation_directory_native"
+    "join"
+    "just_executable"
+    "justfile"
+    "justfile_directory"
+    "kebabcase"
+    "lowercamelcase"
+    "lowercase"
+    "os"
+    "os_family"
+    "parent_directory"
+    "path_exists"
+    "quote"
+    "replace"
+    "replace_regex"
+    "sha256"
+    "sha256_file"
+    "shoutykebabcase"
+    "shoutysnakecase"
+    "snakecase"
+    "titlecase"
+    "trim"
+    "trim_end"
+    "trim_end_match"
+    "trim_end_matches"
+    "trim_start"
+    "trim_start_match"
+    "trim_start_matches"
+    "uppercamelcase"
+    "uppercase"
+    "uuid"
+    "without_extension"))
 
-(defconst just-highlights
-  '(;; Variable interpolation looks like "{{varname}}"
+(defun just-keyword-regex (keywords)
+  "Create a regex for a list of keywords.
+Argument KEYWORDS the list of keywords"
+  (concat "\\<\\(" (string-join keywords "\\|") "\\)\\>"))
+
+(defconst just-font-lock-keywords
+  `(;; Variable interpolation looks like "{{varname}}"
     ("{{[^}\n]*}}" . font-lock-variable-name-face)
+    ;; File includes
+    ("^\\(!include\\) \\(.*\\)"
+     (1 font-lock-keyword-face)
+     (2 font-lock-string-face))
+    ;; Setting, exporting, and aliasing
+    ("^\\(alias\\|set\\|export\\) +\\([^ \n]*\\)"
+     (1 font-lock-keyword-face)
+     (2 font-lock-variable-name-face))
     ;; Variable assignment looks like "varname :="
-    ("\\([^ \n]*\\) *:=" 1 font-lock-variable-name-face)
+    ("^\\([^ \n]*\\) *:=" 1 font-lock-variable-name-face)
     ;; Highlight variable interpolation in shell scripts like "${varname}"
     ("\\${\\([^}\n]*\\)}" 1 font-lock-variable-name-face)
     ;; Highlight rules like "rulename:"
+    ;; TODO highlight arguments to rules. I would have done it, but it was hard so I gave up for now.
     ("^\\(@?\\)\\([^ @:\n]+\\).*:\\([^=\n]\\|$\\)"
      (1 font-lock-negation-char-face)
      (2 font-lock-function-name-face))
-    ;; TODO highlight arguments to rules. I would have done it, but it was hard so I gave up for now.
-    ))
-
-(defconst just-font-lock-keywords
-  (append just-keywords
-          just-highlights))
+    ;; Keywords
+    (,(just-keyword-regex '("if" "else")) . font-lock-keyword-face)
+    ;; Built-in functions
+    (,(just-keyword-regex just-builtin-functions) . font-lock-constant-face)))
 
 (defconst just-mode-syntax-table
   (let ((syntax-table (make-syntax-table)))
@@ -78,6 +135,8 @@
     (modify-syntax-entry ?- "w" syntax-table)
     ;; backticks are like quotes in shell
     (modify-syntax-entry ?` "\"" syntax-table)
+    ;; single quotes are allowed
+    (modify-syntax-entry ?' "\"" syntax-table)
     syntax-table))
 
 (defun just-untab-region (N)
