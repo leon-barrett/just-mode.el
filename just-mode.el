@@ -110,6 +110,8 @@ Argument KEYWORDS the list of keywords"
     ("^\\(alias\\|set\\|export\\) +\\([^ \n]*\\)"
      (1 font-lock-keyword-face)
      (2 font-lock-variable-name-face))
+    ;; Comments
+    ("\\(?:\\(?:^\\|:\\)\\s-*\\|\\s-+\\)\\(#[^!].*\\)$" (1 font-lock-comment-face))
     ;; Variable assignment looks like "varname :="
     ("^\\([^ \n]*\\) *:=" 1 font-lock-variable-name-face)
     ;; Highlight variable interpolation in shell scripts like "${varname}"
@@ -126,10 +128,6 @@ Argument KEYWORDS the list of keywords"
 
 (defconst just-mode-syntax-table
   (let ((syntax-table (make-syntax-table)))
-    ;; # starts comments
-    (modify-syntax-entry ?# "<" syntax-table)
-    ;; endline ends comments
-    (modify-syntax-entry ?\n ">" syntax-table)
     ;; underscores and dashes don't break words
     (modify-syntax-entry ?_ "w" syntax-table)
     (modify-syntax-entry ?- "w" syntax-table)
