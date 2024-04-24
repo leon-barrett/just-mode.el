@@ -111,7 +111,7 @@ Argument KEYWORDS the list of keywords"
      (1 font-lock-keyword-face)
      (2 font-lock-variable-name-face))
     ;; Comments
-    ("\\(?:\\(?:^\\|:\\)\\s-*\\|\\s-+\\)\\(#[^!].*\\)$" (1 font-lock-comment-face prepend))
+    ("\\(?:\\(?:^\\|:\\)\\s-*\\|\\s-+\\)\\(#[^!].*\\)$" (1 font-lock-comment-face))
     ;; Variable assignment looks like "varname :="
     ("^\\([^ \n]*\\) *:=" 1 font-lock-variable-name-face)
     ;; Highlight variable interpolation in shell scripts like "${varname}"
