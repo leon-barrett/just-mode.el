@@ -243,6 +243,93 @@ Argument N number of untabs to perform"
   (local-set-key (kbd "DEL") #'just-backspace-whitespace-to-tab-stop)
   (local-set-key (kbd "<backtab>") #'just-untab-region))
 
+(setq just-ts-font-lock-rules
+      `(
+        :language just
+        :override t
+        :feature keyword
+        ((import "import") @font-lock-keyword-face
+         (export "export") @font-lock-keyword-face
+         (module "mod") @font-lock-keyword-face
+         (alias "alias") @font-lock-keyword-face
+         (setting "set") @font-lock-keyword-face
+         (if_expression ["if" @font-lock-keyword-face
+                         (else_clause "else"
+                                      @font-lock-keyword-face)]))
+        :language just
+        :override t
+        :feature error
+        ((ERROR) @font-lock-warning-face)
+        :language just
+        :override t
+        :feature comment
+        ((comment) @font-lock-comment-face
+         (shebang) @font-lock-comment-face)
+        :language just
+        :override t
+        :feature variable
+        ((assignment left: (identifier) @font-lock-variable-name-face)
+         (alias left: (identifier) @font-lock-variable-name-face)
+         (boolean ["true" "false"] @font-lock-constant-face)
+         (value (identifier)) @font-lock-variable-use-face)
+        :language just
+        :override t
+        :feature recipe-header
+        ((recipe_header
+          ["@" @font-lock-negation-char-face
+           (identifier) @font-lock-function-name-face
+           (parameters [(parameter name: (identifier) @font-lock-variable-name-face)
+                        (variadic_parameter (parameter name: (identifier) @font-lock-variable-name-face))])
+           (dependencies
+            (dependency
+             [name: (identifier) @font-lock-function-call-face
+                    (dependency_expression name: (identifier) @font-lock-function-call-face)]))]))
+        :language just
+        :override t
+        :feature function
+        ((function_call name: (identifier) @font-lock-function-call-face)
+         (alias right: (identifier) @font-lock-function-call-face))
+        :language just
+        :override t
+        :feature operator
+        ((variadic_parameter (["*" "+"] @font-lock-operator-face))
+         (expression ["+" "/"] @font-lock-operator-face)
+         (dependencies "&&" @font-lock-operator-face))
+        :language just
+        :override t
+        :feature recipe
+        ((recipe_line_prefix ["@-" "-@" "@" "-"] @font-lock-negation-char-face))
+        :language just
+        :override t
+        :feature string
+        ((string) @font-lock-string-face
+         (string (escape_sequence) @font-lock-escape-face)
+         (interpolation ["{{" "}}"] @font-lock-variable-name-face)
+         (external_command (command_body)) @font-lock-string-face)
+        :language just
+        :override t
+        :feature attribute
+        ((attribute) @font-lock-preprocessor-face)))
+
+(defun just-ts-setup ()
+  "Setup tree-sitter for just-ts-mode."
+  (interactive)                         ; temporary
+  (setq-local treesit-font-lock-settings (apply #'treesit-font-lock-rules
+                                                just-ts-font-lock-rules)
+              treesit-font-lock-feature-list '((comment)
+                                               (recipe-header variable string keyword function recipe)
+                                               (operator attribute)
+                                               (error)))
+  (treesit-major-mode-setup)
+  (font-lock-update))
+
+(define-derived-mode just-ts-mode just-mode "Justfile[ts]"
+  :syntax-table just-mode-syntax-table
+  (setq-local font-lock-defaults nil)
+  (when (treesit-ready-p 'just)
+    (treesit-parser-create 'just)
+    (just-ts-setup)))
+
 
 
 (provide 'just-mode)
